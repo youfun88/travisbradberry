@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Travis Bradberry TB monogram">
+  <defs>
+    <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2b3360"/>
+      <stop offset="1" stop-color="#13182f"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#f1d27e"/>
+      <stop offset="0.5" stop-color="#e9c46a"/>
+      <stop offset="1" stop-color="#c2902a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- full-bleed navy badge (fills the square so the circle crop looks intentional) -->
+  <rect width="512" height="512" fill="url(#navy)"/>
+  <circle cx="256" cy="256" r="256" fill="url(#navy)"/>
+
+  <!-- thin gold ring -->
+  <circle cx="256" cy="256" r="212" fill="none" stroke="url(#gold)" stroke-width="6" opacity="0.92"/>
+
+  <!-- TB monogram -->
+  <text x="256" y="312" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-size="208" font-weight="700"
+        letter-spacing="-8" fill="url(#gold)">TB</text>
+
+  <!-- EQ accent dots -->
+  <circle cx="256" cy="408" r="7"   fill="url(#gold)"/>
+  <circle cx="214" cy="403" r="5"   fill="#e9c46a" opacity="0.7"/>
+  <circle cx="298" cy="403" r="5"   fill="#e9c46a" opacity="0.7"/>
+</svg>
