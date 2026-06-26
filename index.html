@@ -28,6 +28,12 @@
 
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
+  <!-- Preload the LCP hero image (book cover) -->
+  <link rel="preload" as="image" type="image/webp"
+        href="assets/img/book-cover.webp"
+        imagesrcset="assets/img/book-cover-500.webp 500w, assets/img/book-cover.webp 553w"
+        imagesizes="(max-width: 760px) 300px, 420px" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -110,7 +116,10 @@
           </div>
         </div>
         <div class="cover-stage reveal">
-          <img class="cover" src="assets/img/book-cover.png" alt="The New Emotional Intelligence — book cover by Dr. Travis Bradberry" width="784" height="1077" />
+          <picture>
+            <source type="image/webp" srcset="assets/img/book-cover-500.webp 500w, assets/img/book-cover.webp 553w" sizes="(max-width: 760px) 300px, 420px" />
+            <img class="cover" src="assets/img/book-cover.png" alt="The New Emotional Intelligence — book cover by Dr. Travis Bradberry" width="553" height="760" fetchpriority="high" decoding="async" />
+          </picture>
           <span class="cover-badge"><span class="dot"></span> New release</span>
         </div>
       </div>
@@ -203,7 +212,10 @@
     <section class="section alt" id="about-preview">
       <div class="wrap about-grid">
         <div class="about-photo reveal">
-          <img src="assets/img/travis-headshot.jpg" alt="Dr. Travis Bradberry" width="691" height="690" />
+          <picture>
+            <source type="image/webp" srcset="assets/img/travis-headshot.webp" />
+            <img src="assets/img/travis-headshot.jpg" alt="Dr. Travis Bradberry" width="691" height="690" loading="lazy" decoding="async" />
+          </picture>
         </div>
         <div class="block reveal">
           <p class="kicker">About the author</p>
