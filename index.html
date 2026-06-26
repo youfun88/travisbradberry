@@ -49,7 +49,9 @@
         "@id": "https://www.travisbradberry.com/#book",
         "name": "The New Emotional Intelligence",
         "author": { "@type": "Person", "name": "Dr. Travis Bradberry", "@id": "https://www.travisbradberry.com/#travis" },
-        "about": "Emotional intelligence (EQ)",
+        "about": { "@id": "https://www.travisbradberry.com/#emotional-intelligence" },
+        "genre": "Self-help",
+        "keywords": "emotional intelligence, EQ, self-awareness, self-management, social awareness, relationship management",
         "description": "A groundbreaking new book by Dr. Travis Bradberry that applies the latest breakthroughs in psychology and neuroscience to deliver a proven, step-by-step program that takes your EQ to new heights.",
         "image": "https://www.travisbradberry.com/assets/img/book-cover.png",
         "inLanguage": "en"
@@ -65,6 +67,49 @@
         "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of California, San Diego" },
         "knowsAbout": ["Emotional intelligence", "EQ", "Psychology", "Leadership", "Neuroscience"],
         "sameAs": ["https://www.linkedin.com/in/travisbradberry"]
+      },
+      {
+        "@type": "DefinedTerm",
+        "@id": "https://www.travisbradberry.com/#emotional-intelligence",
+        "name": "Emotional Intelligence",
+        "alternateName": "EQ",
+        "description": "Emotional intelligence (EQ) is the ability to recognize and understand emotions in yourself and others, and to use that awareness to manage your behavior and relationships. It comprises four core skills: self-awareness, self-management, social awareness, and relationship management."
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://www.travisbradberry.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is emotional intelligence (EQ)?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Emotional intelligence (EQ) is your ability to recognize and understand emotions in yourself and others, and to use that awareness to manage your behavior and your relationships. Unlike IQ, emotional intelligence is a flexible skill — you can develop and strengthen it with practice." }
+          },
+          {
+            "@type": "Question",
+            "name": "What are the four core skills of emotional intelligence?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Emotional intelligence is built on four core skills: self-awareness (accurately perceiving your own emotions), self-management (using that awareness to direct your behavior positively), social awareness (reading the emotions of others), and relationship management (using emotional awareness to build stronger interactions)." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you improve your emotional intelligence?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Emotional intelligence is not fixed — it is a skill anyone can build at any age. The New Emotional Intelligence provides a proven, step-by-step program with 60 science-backed strategies to raise each of the four EQ skills." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does emotional intelligence matter?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Emotional intelligence is one of the strongest drivers of success: 90% of top performers are high in EQ, and EQ is twice as important as IQ in getting where you want to go in life. It shapes how you handle stress, make decisions, lead, and connect with others." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is The New Emotional Intelligence about?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The New Emotional Intelligence is a groundbreaking book by Dr. Travis Bradberry, coauthor of the bestseller Emotional Intelligence 2.0. It applies the latest breakthroughs in psychology and neuroscience to deliver a step-by-step program — including 60 new strategies, the Emotional Intelligence Test, and video coaching — to take your EQ to new heights." }
+          },
+          {
+            "@type": "Question",
+            "name": "Who is Dr. Travis Bradberry?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Dr. Travis Bradberry is the world's bestselling emotional intelligence author, with over 5 million books sold in more than 150 countries. He holds a dual Ph.D. in clinical and industrial-organizational psychology and is a LinkedIn Top Voice with 2.6 million followers." }
+          }
+        ]
       }
     ]
   }
@@ -89,6 +134,7 @@
     <nav class="nav-links" id="primary-nav" aria-label="Primary">
       <a href="index.html" class="active">Home</a>
       <a href="#book">The Book</a>
+      <a href="#faq">FAQ</a>
       <a href="about.html">About Me</a>
       <a class="nav-cta" href="#subscribe">Subscribe</a>
     </nav>
@@ -228,6 +274,54 @@
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="section alt" id="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="kicker">Emotional intelligence, explained</p>
+          <h2>Frequently asked questions</h2>
+        </div>
+        <div class="faq reveal">
+          <details class="faq-item" open>
+            <summary>What is emotional intelligence (EQ)?</summary>
+            <div class="faq-a">
+              <p>Emotional intelligence (EQ) is your ability to recognize and understand emotions in yourself and others, and to use that awareness to manage your behavior and your relationships. Unlike IQ, emotional intelligence is a flexible skill — you can develop and strengthen it with practice.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What are the four core skills of emotional intelligence?</summary>
+            <div class="faq-a">
+              <p>Emotional intelligence is built on four core skills: <strong>self-awareness</strong> (accurately perceiving your own emotions), <strong>self-management</strong> (using that awareness to direct your behavior positively), <strong>social awareness</strong> (reading the emotions of others), and <strong>relationship management</strong> (using emotional awareness to build stronger interactions).</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can you improve your emotional intelligence?</summary>
+            <div class="faq-a">
+              <p>Yes. Emotional intelligence is not fixed — it is a skill anyone can build at any age. <em>The New Emotional Intelligence</em> provides a proven, step-by-step program with 60 science-backed strategies to raise each of the four EQ skills.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Why does emotional intelligence matter?</summary>
+            <div class="faq-a">
+              <p>Emotional intelligence is one of the strongest drivers of success: 90% of top performers are high in EQ, and EQ is twice as important as IQ in getting where you want to go in life. It shapes how you handle stress, make decisions, lead, and connect with others.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What is The New Emotional Intelligence about?</summary>
+            <div class="faq-a">
+              <p><em>The New Emotional Intelligence</em> is a groundbreaking book by Dr. Travis Bradberry, coauthor of the bestseller <em>Emotional Intelligence 2.0</em>. It applies the latest breakthroughs in psychology and neuroscience to deliver a step-by-step program — including 60 new strategies, the Emotional Intelligence Test, and video coaching — to take your EQ to new heights.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Who is Dr. Travis Bradberry?</summary>
+            <div class="faq-a">
+              <p>Dr. Travis Bradberry is the world's bestselling emotional intelligence author, with over 5 million books sold in more than 150 countries. He holds a dual Ph.D. in clinical and industrial-organizational psychology and is a LinkedIn Top Voice with 2.6 million followers.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <!-- SUBSCRIBE -->
     <section class="cta" id="subscribe">
       <div class="wrap">
@@ -255,6 +349,7 @@
       <nav class="foot-links" aria-label="Footer">
         <a href="index.html">Home</a>
         <a href="#book">The Book</a>
+        <a href="#faq">FAQ</a>
         <a href="about.html">About Me</a>
         <a href="#subscribe">Subscribe</a>
       </nav>
