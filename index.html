@@ -34,12 +34,10 @@
         imagesrcset="assets/img/book-cover-500.webp 500w, assets/img/book-cover.webp 553w"
         imagesizes="(max-width: 760px) 300px, 420px" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Load Google Fonts without blocking render (display=swap shows fallback text immediately) -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" /></noscript>
+  <!-- Self-hosted fonts (no third-party requests) — preload the above-the-fold faces -->
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/fraunces-normal-latin.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-normal-latin.woff2" crossorigin />
+  <link rel="stylesheet" href="assets/fonts.css" />
   <link rel="stylesheet" href="styles.css" />
 
   <script type="application/ld+json">
