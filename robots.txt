@@ -1,0 +1,7 @@
+# https://www.travisbradberry.com/robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin.js
+
+Sitemap: https://www.travisbradberry.com/sitemap.xml
