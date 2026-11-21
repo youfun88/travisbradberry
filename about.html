@@ -90,6 +90,16 @@
     "sameAs": ["https://www.linkedin.com/in/travisbradberry"]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.travisbradberry.com/" },
+      { "@type": "ListItem", "position": 2, "name": "About Me", "item": "https://www.travisbradberry.com/about.html" }
+    ]
+  }
+  </script>
 <script src="https://admin.shiptolive.com/stl-track.js" data-site="travisbradberry" data-leads="1" defer></script>
 </head>
 <body>
@@ -119,6 +129,12 @@
   <main id="main">
     <!-- ABOUT HERO -->
     <section class="about-hero">
+      <nav class="wrap breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li aria-current="page">About Me</li>
+        </ol>
+      </nav>
       <div class="wrap about-hero-grid">
         <div class="about-photo reveal">
           <picture>

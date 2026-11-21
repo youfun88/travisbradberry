@@ -272,6 +272,13 @@ img { display: block; max-width: 100%; }
 .about-hero .role { margin-top: 0.6rem; font-size: 1.05rem; color: var(--teal); font-weight: 600; }
 .about-hero p { margin-top: 1.3rem; color: var(--ink-soft); font-size: 1.1rem; }
 
+/* breadcrumb trail (non-home pages) */
+.breadcrumb { margin-bottom: 1.6rem; font-size: 0.85rem; color: var(--ink-soft); }
+.breadcrumb ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.breadcrumb li + li::before { content: "\203A"; margin-right: 0.4rem; color: var(--gold); }
+.breadcrumb a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.breadcrumb a:hover { color: var(--navy-deep); }
+
 .bio-prose { max-width: 46rem; margin: 0 auto; }
 .bio-prose p { font-size: 1.1rem; color: var(--ink-soft); margin-bottom: 1.3rem; }
 .bio-prose p strong { color: var(--ink); font-weight: 600; }
