@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant" data-rv-lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>更新紀錄 · Change log | Travis Bradberry</title>
+<style>
+body{font-family:system-ui,-apple-system,"PingFang TC",sans-serif;max-width:760px;margin:40px auto;padding:0 16px;color:#222;line-height:1.6;background:#faf8f4}
+a{color:#1d4f91}h1{font-size:24px}h2{font-size:18px;margin-top:32px}p,li{color:#444}
+.item{background:#fff;border:1px solid #e3ddd2;border-radius:10px;padding:16px;margin:16px 0}
+.item h3{font-size:17px;margin:0 0 6px;color:#222}
+.links a{display:inline-block;min-height:44px;line-height:44px;margin-right:16px}
+.form label{display:block;font-size:14px;margin:10px 0 4px;color:#333}
+.form textarea,.form input{width:100%;box-sizing:border-box;font:inherit;padding:10px;border:1px solid #c9c2b5;border-radius:8px;background:#fff}
+.form textarea{min-height:96px}
+.form input{min-height:44px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btns button{min-height:44px;padding:0 18px;font:inherit;font-weight:600;border-radius:22px;border:1px solid #1d4f91;cursor:pointer}
+.approve{background:#1d4f91;color:#fff}.changes{background:#fff;color:#1d4f91}
+.btns button:disabled{opacity:.5;cursor:default}
+.status{min-height:1.5em;margin-top:8px;font-size:14px}
+.status.ok{color:#166534}.status.err{color:#b91c1c}
+ol.q li{margin:0 0 12px}
+.item .en,p .en{display:block;color:#777;font-size:14px;margin-top:2px}
+</style>
+</head>
+<body>
+<!-- review-gate: Google sign-in (checked by admin.shiptolive.com/api/review/check; approvals are checked again there) -->
+<style>
+html:not(.rv-open) body > :not(.rv-gate):not(.tab-close):not(.tab-close-hint):not(script):not(style){display:none!important}
+html.rv-open .rv-gate{display:none}
+.rv-gate{max-width:440px;margin:12vh auto;padding:28px 24px;background:#fff;border:1px solid #e3ddd2;border-radius:14px;text-align:center;font-family:system-ui,-apple-system,"PingFang TC",sans-serif;color:#222}
+.rv-gate h1{font-size:20px;margin:0 0 8px;padding:0}.rv-gate p{color:#555;font-size:15px;line-height:1.6;margin:8px 0}
+#rvBtn{display:flex;justify-content:center;margin:18px 0 6px;min-height:44px}
+.rv-err{color:#b91c1c}
+.rv-who{position:fixed;bottom:12px;right:12px;z-index:10;font:13px system-ui,sans-serif;color:#555;background:#fff;border:1px solid #e3ddd2;border-radius:999px;padding:8px 12px}
+.rv-who button{border:0;background:none;color:#1d4f91;cursor:pointer;font:inherit;padding:0 0 0 8px;min-height:24px}
+</style>
+<div class="rv-gate" role="dialog" aria-labelledby="rvT">
+<h1 id="rvT">請先登入 · Sign in to review</h1>
+<p>這個頁面只開放給網站負責人和開發者，請用受邀的 Google 帳號登入。</p>
+<p>This page is for the site owner and developer. Sign in with your invited Google account.</p>
+<div id="rvBtn"></div>
+<p class="rv-err" role="alert" hidden></p>
+</div>
+<script src="https://accounts.google.com/gsi/client" async></script>
+<script>
+(function(){
+  var SITE='travisbradberry', PAGE='log', CLIENT='256863040665-48dc9gc0eig6fu68m4to2upqtuamd60k.apps.googleusercontent.com', API='https://admin.shiptolive.com/api/review/check';
+  var err=document.querySelector('.rv-err');
+  function fail(m){err.hidden=false;err.textContent=m;}
+  function exp(c){try{return JSON.parse(atob(c.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).exp*1000;}catch(e){return 0;}}
+  function forget(){try{localStorage.removeItem('rv_cred');}catch(e){}}
+  function who(email){
+    var d=document.createElement('div');d.className='rv-who';d.textContent=email;
+    var b=document.createElement('button');b.type='button';b.textContent='登出 Sign out';
+    b.onclick=function(){forget();if(window.google&&google.accounts)google.accounts.id.disableAutoSelect();location.reload();};
+    d.appendChild(b);document.body.appendChild(d);
+  }
+  function check(cred,silent){
+    return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({site:SITE,page:PAGE,credential:cred})})
+      .then(function(r){return r.json().catch(function(){return {};});})
+      .then(function(j){
+        if(j&&j.ok){var keep=j.session||cred;window.RV_CRED=keep;try{localStorage.setItem('rv_cred',keep);}catch(e){}
+          document.documentElement.classList.add('rv-open');who(j.email);return;}
+        forget();if(!silent)fail('這個 Google 帳號沒有這個頁面的權限。This Google account does not have access to this page.');
+      })
+      .catch(function(){if(!silent)fail('無法確認登入，請稍後再試。Could not check your sign-in. Please try again.');});
+  }
+  var saved=null;try{saved=localStorage.getItem('rv_cred');}catch(e){}
+  var handoff=location.hash.match(/^#rv=([\w.-]+)$/);
+  if(handoff){saved=handoff[1];history.replaceState(null,'',location.pathname+location.search);}
+  var live=saved&&exp(saved)>Date.now()+120000;if(live)check(saved,true);
+  (function wait(){
+    if(!(window.google&&google.accounts&&google.accounts.id))return setTimeout(wait,100);
+    google.accounts.id.initialize({client_id:CLIENT,auto_select:true,callback:function(r){err.hidden=true;check(r.credential,false);}});
+    google.accounts.id.renderButton(document.getElementById('rvBtn'),{theme:'outline',size:'large',text:'signin_with'});
+    if(!live)google.accounts.id.prompt();
+  })();
+})();
+</script>
+
+<button type="button" class="tab-close" aria-label="關閉分頁 Close tab" title="關閉分頁 Close tab">&times;</button>
+<p class="tab-close-hint" role="status" hidden>請直接關閉這個分頁。You can close this tab now.</p>
+<style>
+.tab-close{position:fixed;top:12px;right:12px;z-index:10;width:44px;height:44px;border-radius:50%;border:1px solid #c9c2b5;background:#fff;color:#333;font-size:26px;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.tab-close:hover{background:#f1ede6}.tab-close:focus-visible{outline:2px solid #1d4f91;outline-offset:2px}
+h1{padding-right:52px}
+.tab-close-hint{position:fixed;top:62px;right:12px;z-index:10;margin:0;padding:8px 12px;background:#222;color:#fff;border-radius:8px;font-size:14px}
+</style>
+<script>
+document.querySelector('.tab-close').addEventListener('click',function(){
+  window.close();
+  // Browsers only let a page close a tab that was opened by a link or script; otherwise say so.
+  setTimeout(function(){document.querySelector('.tab-close-hint').hidden=false;},300);
+});
+</script>
+<h1>更新紀錄 · Change log</h1>
+<p>Travis Bradberry 網站（www.travisbradberry.com）的每一次更新，最新的在最上面。等待同意的項目：<a href="/pending/">/pending</a>（內容）· <a href="/pending/yufan">/pending/yufan</a>（開發者）。這個頁面不會從網站連過來，也不會被搜尋引擎收錄。<span class="en">Every change to the Travis Bradberry site, newest first. Waiting for approval: /pending (content) · /pending/yufan (developer). Not linked from the site and not indexed.</span></p>
+<!-- New runs: add a <div class="item"> right below this line. Chinese first; a short English line may follow in <span class="en">. -->
+<div class="item"><h3>2026-11-21（設定，由 Yufan 完成 · setup, by Yufan）</h3><ul>
+<li>已加上 AI 訪客追蹤（首頁和 About 頁），可以知道有多少人是從 ChatGPT、Claude、Perplexity 等 AI 助理過來的。<span class="en">AI-visit tracking added to Home and About: we can see visits that come from AI assistants.</span></li>
+<li>從現在起網站每天檢查一次。小的技術修正會寫在這裡；任何會改變網站內容的修改，都會先放到 <a href="/pending/">/pending</a>（新文章則在<a href="https://admin.shiptolive.com/marketing/travisbradberry/review" target="_blank" rel="noopener">「審閱文章」</a>頁面）等同意。<span class="en">From now on the site is checked once a day; anything that changes what the site says waits for approval first.</span></li>
+</ul></div>
+</body></html>

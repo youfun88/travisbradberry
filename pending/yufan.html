@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh-Hant" data-rv-lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>開發者審閱 · Developer review | Travis Bradberry</title>
+<style>
+body{font-family:system-ui,-apple-system,"PingFang TC",sans-serif;max-width:760px;margin:40px auto;padding:0 16px;color:#222;line-height:1.6;background:#faf8f4}
+a{color:#1d4f91}h1{font-size:24px}h2{font-size:18px;margin-top:32px}p,li{color:#444}
+.item{background:#fff;border:1px solid #e3ddd2;border-radius:10px;padding:16px;margin:16px 0}
+.item h3{font-size:17px;margin:0 0 6px;color:#222}
+.links a{display:inline-block;min-height:44px;line-height:44px;margin-right:16px}
+.form label{display:block;font-size:14px;margin:10px 0 4px;color:#333}
+.form textarea,.form input{width:100%;box-sizing:border-box;font:inherit;padding:10px;border:1px solid #c9c2b5;border-radius:8px;background:#fff}
+.form textarea{min-height:96px}
+.form input{min-height:44px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btns button{min-height:44px;padding:0 18px;font:inherit;font-weight:600;border-radius:22px;border:1px solid #1d4f91;cursor:pointer}
+.approve{background:#1d4f91;color:#fff}.changes{background:#fff;color:#1d4f91}
+.btns button:disabled{opacity:.5;cursor:default}
+.status{min-height:1.5em;margin-top:8px;font-size:14px}
+.status.ok{color:#166534}.status.err{color:#b91c1c}
+ol.q li{margin:0 0 12px}
+.ba{display:block;margin:6px 0;padding:8px 10px;border-left:3px solid;border-radius:4px}
+.ba b{display:block;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.ba.was{color:#b91c1c;background:#fef2f2;border-color:#b91c1c}
+.ba.now{color:#166534;background:#f0fdf4;border-color:#166534}
+.ba code{color:inherit;background:none}
+</style>
+<link rel="stylesheet" href="/pending/review-ui.css">
+</head>
+<body>
+<!-- review-gate: Google sign-in (checked by admin.shiptolive.com/api/review/check; approvals are checked again there) -->
+<style>
+html:not(.rv-open) body > :not(.rv-gate):not(.tab-close):not(.tab-close-hint):not(script):not(style){display:none!important}
+html.rv-open .rv-gate{display:none}
+.rv-gate{max-width:440px;margin:12vh auto;padding:28px 24px;background:#fff;border:1px solid #e3ddd2;border-radius:14px;text-align:center;font-family:system-ui,-apple-system,"PingFang TC",sans-serif;color:#222}
+.rv-gate h1{font-size:20px;margin:0 0 8px;padding:0}.rv-gate p{color:#555;font-size:15px;line-height:1.6;margin:8px 0}
+#rvBtn{display:flex;justify-content:center;margin:18px 0 6px;min-height:44px}
+.rv-err{color:#b91c1c}
+.rv-who{position:fixed;bottom:12px;right:12px;z-index:10;font:13px system-ui,sans-serif;color:#555;background:#fff;border:1px solid #e3ddd2;border-radius:999px;padding:8px 12px}
+.rv-who button{border:0;background:none;color:#1d4f91;cursor:pointer;font:inherit;padding:0 0 0 8px;min-height:24px}
+</style>
+<div class="rv-gate" role="dialog" aria-labelledby="rvT">
+<h1 id="rvT">請先登入 · Sign in to review</h1>
+<p>這個頁面只開放給網站負責人和開發者，請用受邀的 Google 帳號登入。</p>
+<p>This page is for the site owner and developer. Sign in with your invited Google account.</p>
+<div id="rvBtn"></div>
+<p class="rv-err" role="alert" hidden></p>
+</div>
+<script src="https://accounts.google.com/gsi/client" async></script>
+<script>
+(function(){
+  var SITE='travisbradberry', PAGE='yufan', CLIENT='256863040665-48dc9gc0eig6fu68m4to2upqtuamd60k.apps.googleusercontent.com', API='https://admin.shiptolive.com/api/review/check';
+  var err=document.querySelector('.rv-err');
+  function fail(m){err.hidden=false;err.textContent=m;}
+  function exp(c){try{return JSON.parse(atob(c.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).exp*1000;}catch(e){return 0;}}
+  function forget(){try{localStorage.removeItem('rv_cred');}catch(e){}}
+  function who(email){
+    var d=document.createElement('div');d.className='rv-who';d.textContent=email;
+    var b=document.createElement('button');b.type='button';b.textContent='登出 Sign out';
+    b.onclick=function(){forget();if(window.google&&google.accounts)google.accounts.id.disableAutoSelect();location.reload();};
+    d.appendChild(b);document.body.appendChild(d);
+  }
+  function check(cred,silent){
+    return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({site:SITE,page:PAGE,credential:cred})})
+      .then(function(r){return r.json().catch(function(){return {};});})
+      .then(function(j){
+        if(j&&j.ok){var keep=j.session||cred;window.RV_CRED=keep;try{localStorage.setItem('rv_cred',keep);}catch(e){}
+          document.documentElement.classList.add('rv-open');who(j.email);return;}
+        forget();if(!silent)fail('這個 Google 帳號沒有這個頁面的權限。This Google account does not have access to this page.');
+      })
+      .catch(function(){if(!silent)fail('無法確認登入，請稍後再試。Could not check your sign-in. Please try again.');});
+  }
+  var saved=null;try{saved=localStorage.getItem('rv_cred');}catch(e){}
+  var handoff=location.hash.match(/^#rv=([\w.-]+)$/);
+  if(handoff){saved=handoff[1];history.replaceState(null,'',location.pathname+location.search);}
+  var live=saved&&exp(saved)>Date.now()+120000;if(live)check(saved,true);
+  (function wait(){
+    if(!(window.google&&google.accounts&&google.accounts.id))return setTimeout(wait,100);
+    google.accounts.id.initialize({client_id:CLIENT,auto_select:true,callback:function(r){err.hidden=true;check(r.credential,false);}});
+    google.accounts.id.renderButton(document.getElementById('rvBtn'),{theme:'outline',size:'large',text:'signin_with'});
+    if(!live)google.accounts.id.prompt();
+  })();
+})();
+</script>
+
+<button type="button" class="tab-close" aria-label="關閉分頁 Close tab" title="關閉分頁 Close tab">&times;</button>
+<p class="tab-close-hint" role="status" hidden>請直接關閉這個分頁。You can close this tab now.</p>
+<style>
+.tab-close{position:fixed;top:12px;right:12px;z-index:10;width:44px;height:44px;border-radius:50%;border:1px solid #c9c2b5;background:#fff;color:#333;font-size:26px;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.tab-close:hover{background:#f1ede6}.tab-close:focus-visible{outline:2px solid #1d4f91;outline-offset:2px}
+h1{padding-right:52px}
+.tab-close-hint{position:fixed;top:62px;right:12px;z-index:10;margin:0;padding:8px 12px;background:#222;color:#fff;border-radius:8px;font-size:14px}
+</style>
+<script>
+document.querySelector('.tab-close').addEventListener('click',function(){
+  window.close();
+  // Browsers only let a page close a tab that was opened by a link or script; otherwise say so.
+  setTimeout(function(){document.querySelector('.tab-close-hint').hidden=false;},300);
+});
+</script>
+<h1>開發者審閱 · SEO / AEO / GEO</h1>
+<p lang="zh-Hant">給 Yufan 同意的搜尋與 AI 能見度修改：標題、描述、結構化資料、內部連結、llms.txt、sitemap、關鍵字。內容修改請到 <a href="/pending/">/pending</a>。這個頁面不會從網站連過來，也不會被搜尋引擎收錄。GX10 會在下一次更新時套用已同意的修改（每天一次）。</p>
+<p lang="en">Search and AI-visibility changes for Yufan to approve: titles, descriptions, schema, internal links, llms.txt, sitemap, keywords. Content changes go to <a href="/pending/">/pending</a>. Not linked from the site and not indexed. The GX10 job applies approved changes at its next run (once a day).</p>
+<p class="updated"><span lang="zh-Hant">更新日期：2026-11-21</span><span lang="en">Updated 2026-11-21.</span></p>
+
+<!-- review-ui (/pending/review-ui.js + .css, shared by /pending and /pending/yufan):
+  - Language: an EN / 中文 switch shows one language. Write every explanation, note, label and question twice, each in
+    its own element: lang="zh-Hant" for Chinese, lang="en" for English, e.g. <p lang="zh-Hant">中文說明</p><p lang="en">English note</p>
+    or <strong lang="zh-Hant">改了什麼：</strong><span lang="zh-Hant">…</span> <strong lang="en">What changed:</strong> <span lang="en">…</span>.
+    Never mix both languages in one text. Drafts (.ba boxes, details.draft-lang, [data-draft], .links) are not tagged: both stay visible.
+  - Before/after: <span class="ba was"><b>Before</b>old</span><span class="ba now"><b>After</b>new</span>, plain text only.
+    The script highlights the changed words itself; don't hand-mark them.
+  - Several before/after pairs in one item: wrap each pair in its own element marked data-pair="1", "2", … in page order, e.g.
+    <li data-pair="1"><strong lang="zh-Hant">位置：</strong><strong lang="en">Where:</strong><span class="ba was">…</span><span class="ba now">…</span></li>.
+    The script numbers them (第 1 處 / Change 1) and gives each a keep / skip toggle. Approve stays the one final button; when
+    something is skipped the comment sent ends with "[部分同意] 同意：1, 2；不要：3". Publish only the kept pairs (COMMON.md step 3).
+  - Each item carries data-status="<board stage>" (review / changes / approved); when approved, data-approved="YYYY-MM-DD";
+    when at changes, data-requested="YYYY-MM-DD" (the date changes were asked). Items at changes collapse into
+    「需要修改，處理中」 and approved items into 「已同意，等待上線」, below the waiting ones, by themselves.
+    After revising, set data-status back to "review" (and drop data-requested): the card returns to the top.
+  - Each item also carries data-type, shown as a badge above its title: new (新文章, a page that doesn't exist yet),
+    update (更新現有頁面, edits to a live page), section (新增段落, added to a live page), setting (網站設定: titles,
+    descriptions, schema, technical; every [Yufan] item), question (問題, the Questions box). For update and section, name
+    the page: data-page="English page name" data-page-zh="中文頁名". Example:
+    <div class="item" data-item="..." data-type="section" data-page="About" data-page-zh="關於我們" data-status="review">
+-->
+<!-- Item markup (copy for each draft; data-item must equal the board title exactly):
+<div class="item" data-item="TITLE" data-type="setting">
+<h3>1. TITLE</h3>
+<p>What changed and why.</p>
+<div class="links"><a href="/pending/..." target="_blank" rel="noopener">Preview</a><a href="/..." target="_blank" rel="noopener">Live version</a></div>
+</div>
+-->
+<h2><span lang="zh-Hant">等待同意</span><span lang="en">Waiting for approval</span></h2>
+<p lang="zh-Hant">目前還沒有。</p><p lang="en">Nothing yet.</p>
+
+<script>
+(function(){
+  var API='https://admin.shiptolive.com/api/contact';
+  document.querySelectorAll('.item').forEach(function(box,i){
+    var item=box.getAttribute('data-item'), general=item==='Questions';
+    var f=document.createElement('div'); f.className='form';
+    var id='c'+i;
+    f.innerHTML='<label for="'+id+'">'+(general?'回覆 / Answers':'意見 / Comments')+'</label>'+
+      '<textarea id="'+id+'"></textarea>'+
+      '<label for="'+id+'n">您的名字 / Your name（選填 optional）</label><input id="'+id+'n" type="text" autocomplete="name">'+
+      '<div class="btns">'+(general?'<button type="button" class="approve" data-d="answers">送出回覆 Send</button>':
+        '<button type="button" class="approve" data-d="approve">同意上線 Approve</button><button type="button" class="changes" data-d="changes">需要修改 Request changes</button>')+
+      '</div><div class="status" role="status" aria-live="polite"></div>';
+    box.appendChild(f);
+    var ta=f.querySelector('textarea'), nm=f.querySelector('input'), st=f.querySelector('.status');
+    f.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){
+        var d=b.getAttribute('data-d'), comment=ta.value.trim();
+        if((d==='changes'||d==='answers')&&!comment){st.className='status err';st.textContent=d==='changes'?'請先填寫要修改的地方。Please describe the changes.':'請先填寫回覆。Please write your answers.';ta.focus();return;}
+        var btns=f.querySelectorAll('button'); btns.forEach(function(x){x.disabled=true;});
+        st.className='status';st.textContent='送出中… Sending…';
+        fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},
+          body:JSON.stringify({kind:'review',site:'travisbradberry',item:item,decision:general?'changes':d,comment:comment,reviewer:nm.value.trim(),credential:window.RV_CRED||'',page:location.href})})
+        .then(function(r){return r.json().catch(function(){return {};});})
+        .then(function(j){
+          if(j&&j.ok){st.className='status ok';st.textContent='已送出，謝謝！Sent, thank you.';}
+          else throw new Error('not ok');
+        })
+        .catch(function(){st.className='status err';st.textContent='送出失敗，文字已保留。登入超過一小時請重新整理頁面再登入，或稍後再試。Could not send; your text is kept. If you signed in over an hour ago, reload and sign in again.';})
+        .finally(function(){btns.forEach(function(x){x.disabled=false;});});
+      });
+    });
+  });
+})();
+</script>
+<script id="rv-received">
+/* Shows replies already sent, so a refresh doesn't look as if they were lost. */
+(function(){
+  var n=0;
+  (function wait(){
+    if(!window.RV_CRED){if(++n<1200)setTimeout(wait,500);return;}
+    fetch('https://admin.shiptolive.com/api/review/check',{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({site:'travisbradberry',page:'yufan',credential:window.RV_CRED})})
+    .then(function(r){return r.json();})
+    .then(function(j){
+      ((j&&j.received)||[]).forEach(function(r){
+        document.querySelectorAll('.item').forEach(function(box){
+          if(box.getAttribute('data-item')!==r.item)return;
+          var d=document.createElement('div');
+          d.className='rv-received-note';d.setAttribute('data-item',r.item);
+          d.style.cssText='margin:12px 0;padding:10px 12px;border:1px solid #bbf7d0;border-radius:8px;background:#f0fdf4;color:#166534;font-size:14px;line-height:1.5';
+          var t=document.createElement('strong');
+          t.textContent=r.decision==='approve'?'已同意（'+r.date+'），下次更新時上線。Approved '+r.date+'. Goes live at the next update.':'已收到您 '+r.date+' 的回覆，下次更新時會處理。Received '+r.date+'. It gets handled at the next update, once a day.';
+          d.appendChild(t);
+          if(r.comment){var q=document.createElement('div');q.style.cssText='margin-top:6px;white-space:pre-wrap;color:#1f2937';q.textContent=r.comment;d.appendChild(q);}
+          var f=box.querySelector('.form');if(f)box.insertBefore(d,f);else box.appendChild(d);
+        });
+      });
+    })
+    .catch(function(){});
+  })();
+})();
+</script>
+<script id="rv-undo">
+/* Undo the last reply on an item, while the site job hasn't acted on it yet. */
+(function(){
+  var API='https://admin.shiptolive.com/api/contact';
+  function addUndo(holder, item, onDone){
+    if(!item||holder.querySelector('.rv-undo-btn'))return;
+    var b=document.createElement('button');
+    b.type='button';b.className='rv-undo-btn';b.textContent='取消這次回覆 Cancel this request';
+    b.style.cssText='margin-left:10px;padding:2px 10px;border:1px solid #b91c1c;border-radius:999px;background:#fef2f2;color:#b91c1c;font:inherit;font-size:13px;font-weight:600;cursor:pointer';
+    b.onclick=function(){
+      b.disabled=true;b.textContent='取消中… Cancelling…';
+      fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({kind:'review',site:'travisbradberry',item:item,decision:'undo',credential:window.RV_CRED||'',page:location.href})})
+      .then(function(r){return r.json().catch(function(){return {};});})
+      .then(function(j){
+        if(j&&j.ok){onDone();return;}
+        b.remove();
+        var m=document.createElement('span');m.style.cssText='margin-left:10px;color:#b91c1c';
+        m.textContent=j&&j.error==='late'?'已經處理過，無法取消。Already handled; it can no longer be cancelled.':'取消失敗，請稍後再試。Could not cancel; please try again.';
+        holder.appendChild(m);
+      })
+      .catch(function(){b.disabled=false;b.textContent='取消這次回覆 Cancel this request';});
+    };
+    holder.appendChild(b);
+  }
+  function scan(){
+    document.querySelectorAll('.item .status.ok').forEach(function(st){
+      var box=st.closest('.item');if(!box)return;
+      addUndo(st,box.getAttribute('data-item'),function(){st.className='status';st.textContent='已取消這次回覆，可以重新送出。Cancelled. You can send again.';});
+    });
+    document.querySelectorAll('.rv-received-note').forEach(function(n){
+      addUndo(n.querySelector('strong')||n,n.getAttribute('data-item'),function(){n.remove();});
+    });
+  }
+  new MutationObserver(scan).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+  scan();
+})();
+</script>
+<script src="/pending/review-ui.js"></script>
+</body></html>

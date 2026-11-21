@@ -3,5 +3,7 @@ User-agent: *
 Allow: /
 Disallow: /admin.html
 Disallow: /admin.js
+Disallow: /pending
+Disallow: /log
 
 Sitemap: https://www.travisbradberry.com/sitemap.xml
