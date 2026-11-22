@@ -131,33 +131,7 @@ document.querySelector('.tab-close').addEventListener('click',function(){
 </div>
 -->
 <h2><span lang="zh-Hant">等待同意</span><span lang="en">Waiting for approval</span></h2>
-<div class="item" data-item="[Yufan] Home: shorter meta description" data-type="setting" data-status="approved" data-approved="2026-11-22">
-<h3><span lang="zh-Hant">首頁：縮短描述（meta description）</span><span lang="en">[Yufan] Home: shorter meta description</span></h3>
-<p lang="zh-Hant">網站健檢把首頁描述標為警告：206 個字元，Google 會截斷。改成 160 個字元，保留書名、作者、Emotional Intelligence 2.0 和「step-by-step program」，並去掉長破折號。分支 seo/home-meta-description。</p>
-<p lang="en">Site health warns on the homepage meta description: 206 characters, which Google truncates. Now 160, keeping the book title, author, Emotional Intelligence 2.0 and "step-by-step program", without the em dash. Branch seo/home-meta-description.</p>
-<ul><li><strong lang="zh-Hant">位置：index.html meta description</strong><strong lang="en">Where: index.html meta description</strong><span class="ba was"><b>Before</b>The New Emotional Intelligence is a groundbreaking new book by Dr. Travis Bradberry, coauthor of the bestseller Emotional Intelligence 2.0 — a proven, step-by-step program that takes your EQ to new heights.</span><span class="ba now"><b>After</b>The New Emotional Intelligence is the new book by Dr. Travis Bradberry, coauthor of Emotional Intelligence 2.0: a proven, step-by-step program to raise your EQ.</span></li></ul>
-<div class="links"><a href="/" target="_blank" rel="noopener">Live version</a></div>
-</div>
-
-<div class="item" data-item="[Yufan] About: breadcrumb trail and BreadcrumbList schema" data-type="setting" data-status="approved" data-approved="2026-11-22">
-<h3><span lang="zh-Hant">About 頁：麵包屑和 BreadcrumbList 結構化資料</span><span lang="en">[Yufan] About: breadcrumb trail and BreadcrumbList schema</span></h3>
-<p lang="zh-Hant">頁面檢查：About 頁沒有麵包屑（BreadcrumbList）。在 H1 上方加一行小字「Home › About Me」，用現有的頁名，並加上對應的 BreadcrumbList JSON-LD；樣式放在共用的 styles.css，之後新頁面（例如書籍頁）也用同一套。首頁不加。分支 seo/about-breadcrumbs。</p>
-<p lang="en">Page checklist: About has no breadcrumb (BreadcrumbList). Adds a small "Home › About Me" trail above the H1 using the existing page names, plus matching BreadcrumbList JSON-LD. The styles go in the shared styles.css so new pages (such as the book page) use the same template. Home is skipped. Branch seo/about-breadcrumbs.</p>
-<ul><li><strong lang="zh-Hant">位置：about.html，H1 上方</strong><strong lang="en">Where: about.html, above the H1</strong><span class="ba was"><b>Before</b>(no breadcrumb)</span><span class="ba now"><b>After</b>Home › About Me (+ BreadcrumbList: Home → https://www.travisbradberry.com/, About Me → /about.html)</span></li></ul>
-<div class="links"><a href="/pending/about-breadcrumb-preview.html" target="_blank" rel="noopener">Preview</a><a href="/about.html" target="_blank" rel="noopener">Live version</a></div>
-</div>
-
-<div class="item" data-item="[Yufan] Home: Person and Book schema (alternateName, Wikidata, Emotional Intelligence 2.0)" data-type="setting" data-status="approved" data-approved="2026-11-22">
-<h3><span lang="zh-Hant">首頁：人物和書籍結構化資料（別名、Wikidata、Emotional Intelligence 2.0）</span><span lang="en">[Yufan] Home: Person and Book schema (alternateName, Wikidata, Emotional Intelligence 2.0)</span></h3>
-<p lang="zh-Hant">AI 檢測：12 個回答中 9 個提到 Travis，多數是因為 Emotional Intelligence 2.0，但網站的結構化資料只有新書，沒有把他和 EI 2.0 連起來；回答裡也常只寫「Travis Bradberry」（沒有 Dr.）。這次加上 alternateName「Travis Bradberry」、Wikidata 的 sameAs（Q17986043，「American business writer」，學歷 UC San Diego 和網站一致），一個 Emotional Intelligence 2.0 的 Book（作者指向同一個人），並給新書加上 url。沒有改任何看得到的文字。分支 seo/home-entity-schema。</p>
-<p lang="en">AI check: 9 of 12 answers named Travis, mostly through Emotional Intelligence 2.0, but the site's schema only describes the new book and never ties him to EI 2.0; answers also often write "Travis Bradberry" without "Dr.". Adds alternateName "Travis Bradberry", a Wikidata sameAs (Q17986043, "American business writer", educated at UC San Diego, matching the site), an Emotional Intelligence 2.0 Book whose author is the same Person, and a url on the new book. No visible text changes. Branch seo/home-entity-schema.</p>
-<ul>
-<li data-pair="1"><strong lang="zh-Hant">位置：Person</strong><strong lang="en">Where: Person</strong><span class="ba was"><b>Before</b>"sameAs": ["https://www.linkedin.com/in/travisbradberry"]</span><span class="ba now"><b>After</b>"alternateName": "Travis Bradberry", "sameAs": ["https://www.linkedin.com/in/travisbradberry", "https://www.wikidata.org/wiki/Q17986043"]</span></li>
-<li data-pair="2"><strong lang="zh-Hant">位置：新的 Book 項目</strong><strong lang="en">Where: new Book node</strong><span class="ba was"><b>Before</b>(none)</span><span class="ba now"><b>After</b>{"@type": "Book", "@id": "#eq2", "name": "Emotional Intelligence 2.0", "author": {"@id": "#travis"}, "about": {"@id": "#emotional-intelligence"}}</span></li>
-<li data-pair="3"><strong lang="zh-Hant">位置：Book（The New Emotional Intelligence）</strong><strong lang="en">Where: Book (The New Emotional Intelligence)</strong><span class="ba was"><b>Before</b>(no url)</span><span class="ba now"><b>After</b>"url": "https://www.travisbradberry.com/"</span></li>
-</ul>
-<div class="links"><a href="/" target="_blank" rel="noopener">Live version</a></div>
-</div>
+<p class="empty"><span lang="zh-Hant">目前沒有待審項目。</span><span lang="en">Nothing yet.</span></p>
 
 <script>
 (function(){
