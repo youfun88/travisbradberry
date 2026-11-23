@@ -25,6 +25,7 @@ This site is the official home of Dr. Travis Bradberry and his book *The New Emo
 ## Pages
 
 - [Home](https://www.travisbradberry.com/): Overview of *The New Emotional Intelligence*, the four core EQ skills, and key features of the book.
+- [The New Emotional Intelligence](https://www.travisbradberry.com/the-new-emotional-intelligence.html): The book page: what's inside (60 new strategies, the Emotional Intelligence Test, video e-learning), who it's for, and an FAQ.
 - [About](https://www.travisbradberry.com/about.html): Full biography, credentials, press coverage, and speaking/client history.
 
 ## Contact
