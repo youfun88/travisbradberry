@@ -1,10 +1,13 @@
 // Admin dashboard for newsletter subscribers.
-// Auth + reads go through Supabase. The publishable key is public — security
-// comes from Supabase Auth (login required) + a Row-Level Security policy that
-// only lets authenticated users SELECT. The public site key can only INSERT.
+// Auth + reads go through Supabase. The publishable key is public. Security comes
+// from Supabase Auth (Google sign-in) + a Row-Level Security policy that only lets
+// the approved Google accounts below SELECT. The public site key can only INSERT.
+// The ALLOWED list here only gives a friendly message; the database policy is the gate.
 (function () {
   const SUPABASE_URL = 'https://eptdqgutovwymnmstrwt.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_qNaE7sOLfsH4k23oXcruCA_1GsGcztv';
+
+  const ALLOWED = ['yufanchen@gmail.com', 'yufansapp@gmail.com', 'sleshtw@gmail.com'];
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -143,35 +146,44 @@
   }
 
   function showLogin() {
+    shownFor = null;
     dashView.hidden = true;
     loginView.hidden = false;
     allRows = [];
   }
 
   // ---- auth ----
-  loginForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const email = $('email').value.trim();
-    const password = $('password').value;
-    if (!email || !password) {
-      loginMsg.textContent = 'Enter your email and password.';
-      loginMsg.className = 'msg err';
-      return;
-    }
+  loginBtn.addEventListener('click', async function () {
     loginBtn.disabled = true;
-    loginMsg.textContent = 'Signing in…';
+    loginMsg.textContent = 'Opening Google…';
     loginMsg.className = 'msg';
-    const { data, error } = await sb.auth.signInWithPassword({ email, password });
-    loginBtn.disabled = false;
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: location.origin + location.pathname, queryParams: { prompt: 'select_account' } },
+    });
     if (error) {
+      loginBtn.disabled = false;
       loginMsg.textContent = error.message || 'Sign-in failed.';
       loginMsg.className = 'msg err';
+    }
+  });
+
+  // Signed in: approved accounts see the dashboard, anyone else is signed out again.
+  let shownFor = null; // avoid loading twice when Supabase reports the same session again
+  async function onSession(session) {
+    if (!session) return showLogin();
+    const email = ((session.user && session.user.email) || '').toLowerCase();
+    if (email && email === shownFor) return;
+    if (!ALLOWED.includes(email)) {
+      await sb.auth.signOut();
+      showLogin();
+      loginMsg.textContent = (email || 'This account') + ' is not allowed to view subscribers.';
+      loginMsg.className = 'msg err';
       return;
     }
-    loginForm.reset();
-    loginMsg.textContent = '';
-    showDashboard(data.user && data.user.email);
-  });
+    shownFor = email;
+    showDashboard(email);
+  }
 
   $('logout-btn').addEventListener('click', async function () {
     await sb.auth.signOut();
@@ -183,13 +195,13 @@
     b.addEventListener('click', () => setPeriod(b.dataset.period));
   });
 
-  // ---- restore session on load ----
+  // ---- restore session on load (also finishes the Google redirect) ----
   (async function init() {
     const { data } = await sb.auth.getSession();
-    if (data && data.session) {
-      showDashboard(data.session.user && data.session.user.email);
-    } else {
-      showLogin();
-    }
+    await onSession(data && data.session);
+    sb.auth.onAuthStateChange(function (event, session) {
+      if (event === 'SIGNED_IN') onSession(session);
+      if (event === 'SIGNED_OUT') showLogin();
+    });
   })();
 })();
