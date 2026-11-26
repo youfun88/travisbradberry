@@ -97,7 +97,10 @@
         "@type": "Book",
         "@id": "https://www.travisbradberry.com/#eq2",
         "name": "Emotional Intelligence 2.0",
-        "author": { "@id": "https://www.travisbradberry.com/#travis" }
+        "author": [
+          { "@id": "https://www.travisbradberry.com/#travis" },
+          { "@type": "Person", "name": "Jean Greaves" }
+        ]
       }
     ]
   }
@@ -191,7 +194,7 @@
       <div class="wrap about-hero-grid">
         <div class="about-photo reveal">
           <picture>
-            <source type="image/webp" srcset="assets/img/travis-headshot.webp" />
+            <source type="image/webp" srcset="/assets/img/travis-headshot.webp" />
             <img src="/assets/img/travis-headshot.jpg" alt="Dr. Travis Bradberry" width="691" height="690" fetchpriority="high" decoding="async" />
           </picture>
         </div>
@@ -232,7 +235,7 @@
           </article>
           <article class="cred reveal">
             <p class="kicker">Coauthor</p>
-            <p><strong>Emotional Intelligence 2.0</strong> is the massive bestseller Dr. Bradberry coauthored. It is built on the same four core skills of emotional intelligence: self-awareness, self-management, social awareness, and relationship management.</p>
+            <p data-new><strong>Emotional Intelligence 2.0</strong> is the massive bestseller Dr. Bradberry coauthored with Jean Greaves. It is built on the same four core skills of emotional intelligence: self-awareness, self-management, social awareness, and relationship management.</p>
           </article>
         </div>
       </div>
@@ -311,7 +314,7 @@
               <p>Dr. Bradberry serves as the Chief People Scientist at LEADx, a provider of emotional intelligence training and emotional intelligence trainer certification.</p>
             </div>
           </details>
-          <details class="faq-item" data-new>
+          <details class="faq-item">
             <summary>Does Dr. Travis Bradberry give keynote speeches?</summary>
             <div class="faq-a">
               <p>Yes. Dr. Bradberry's keynotes and clients include AT&amp;T, Salesforce, Microsoft, Intel, Coca-Cola, Wells Fargo, The Global Leadership Summit, The Fortune Growth Summit, and The Conference Board: Learning from Legends.</p>
@@ -355,6 +358,6 @@
   </footer>
 
   <script src="/script.js" defer></script>
-  <script src="/pending/draft-focus.js" defer></script>
+<script src="/pending/draft-focus.js" defer></script>
 </body>
 </html>
